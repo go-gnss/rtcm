@@ -1,6 +1,7 @@
 package rtcm
 
 // TODO: Consider where this code belongs
+
 import (
     "time"
 )

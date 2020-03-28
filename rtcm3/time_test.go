@@ -1,7 +1,7 @@
 package rtcm3_test
 
 import (
-	"github.com/geoscienceaustralia/go-rtcm/rtcm3"
+	"github.com/go-gnss/rtcm/rtcm3"
 	"testing"
 	"time"
 )

@@ -3,7 +3,7 @@ package rtcm3_test
 import (
 	"bufio"
 	"fmt"
-	"github.com/geoscienceaustralia/go-rtcm/rtcm3"
+	"github.com/go-gnss/rtcm/rtcm3"
 	"github.com/google/go-cmp/cmp"
 	"os"
 	"testing"
