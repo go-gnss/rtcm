@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/geoscienceaustralia/go-rtcm/rtcm3"
-	"github.com/umeat/go-ntrip/ntrip"
+	"github.com/go-gnss/rtcm/rtcm3"
+	"github.com/go-gnss/ntrip"
 	"time"
 )
 
