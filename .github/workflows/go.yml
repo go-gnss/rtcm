@@ -7,14 +7,25 @@ on:
     branches: [ master ]
 
 jobs:
-
-  build:
-    name: Build
+  test:
+    name: Test with Coverage
     runs-on: ubuntu-latest
     steps:
-
-    - name: actions-goveralls
-      uses: shogo82148/actions-goveralls@v1.2.2
+    - name: Set up Go
+      uses: actions/setup-go@v1
       with:
-        # Coveralls uses this token to verify the posted coverage data on the repo and create a new check based on the results.
-        github-token: ${{ github.token }}
+        go-version: '1.14'
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        go mod download
+    - name: Run Unit tests
+      run: |
+        go test -race -covermode atomic -coverprofile=profile.cov ./...
+    - name: Send coverage
+      env:
+        COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        GO111MODULE=off go get github.com/mattn/goveralls
+        $(go env GOPATH)/bin/goveralls -coverprofile=profile.cov -service=github
