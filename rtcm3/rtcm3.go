@@ -5,7 +5,6 @@ import (
 	"encoding/binary"
 	"errors"
 	"github.com/bamiaux/iobit"
-	"io"
 	"time"
 )
 
@@ -14,6 +13,7 @@ type Message interface {
 	Number() int
 }
 
+// TODO: Rename to Observation
 type Observable interface {
 	Message
 	Time() time.Time
@@ -281,7 +281,7 @@ func DeserializeFrame(reader *bufio.Reader) (frame Frame, err error) {
 		return frame, err
 	}
 	if preamble != FramePreamble {
-		return frame, errors.New("Invalid Preamble")
+		return frame, errors.New("invalid preamble")
 	}
 
 	header, err := reader.Peek(2)
@@ -308,41 +308,9 @@ func DeserializeFrame(reader *bufio.Reader) (frame Frame, err error) {
 	}
 
 	if Crc24q(data[:len(data)-3]) != frame.Crc {
-		return frame, errors.New("CRC Failed")
+		return frame, errors.New("invalid CRC")
 	}
 
 	reader.Discard(len(data) - 1)
 	return frame, nil
-}
-
-type Scanner struct {
-	Reader *bufio.Reader
-}
-
-// NewScanner returns a Scanner for the given io.Reader
-func NewScanner(r io.Reader) Scanner {
-	return Scanner{bufio.NewReader(r)}
-}
-
-// Next reads from IO until a Message is found
-func (scanner Scanner) Next() (message Message, err error) {
-	frame, err := scanner.NextFrame()
-	if err != nil {
-		return nil, err
-	}
-	return DeserializeMessage(frame.Payload), err // probably have DeserializeMessage return err
-}
-
-func (scanner Scanner) NextFrame() (frame Frame, err error) {
-	for {
-		frame, err := DeserializeFrame(scanner.Reader)
-		if err != nil {
-			if err.Error() == "Invalid Preamble" || err.Error() == "CRC Failed" {
-				// Continue reading from next byte if a valid Frame was not found
-				//TODO: return byte array of skipped bytes
-				continue
-			}
-		}
-		return frame, err
-	}
 }
