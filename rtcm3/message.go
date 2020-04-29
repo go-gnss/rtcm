@@ -8,17 +8,23 @@ import (
 	"time"
 )
 
+// Message interface represents any RTCM3 message
 type Message interface {
+	// Serialize the message to binary
 	Serialize() []byte
+	// This is the RTCM Message number
 	Number() int
 }
 
-// TODO: Rename to Observation
-type Observable interface {
+// Obseration interface for messages with Epoch attribute
+type Observation interface {
 	Message
+	// Epoch at which the data was observed
 	Time() time.Time
 }
 
+// AbstractMessage is used to factor out the MessageNumber attribute
+// which all Message's have
 type AbstractMessage struct {
 	MessageNumber uint16 `struct:"uint16:12"`
 }
@@ -27,6 +33,10 @@ func (msg AbstractMessage) Number() int {
 	return int(msg.MessageNumber)
 }
 
+// DeserializeMessage extracts Message Number from payload and
+// deserializes to the appropriate Message type
+// TODO: Check length of payload before attempting to parse
+// TODO: Each Deserialize method should return errors
 func DeserializeMessage(payload []byte) (msg Message) {
 	messageNumber := binary.BigEndian.Uint16(payload[0:2]) >> 4
 	switch int(messageNumber) {
@@ -215,6 +225,8 @@ func DeserializeMessage(payload []byte) (msg Message) {
 	}
 }
 
+// MessageUnknown is used for valid Messages for which no type yet
+// exists - For example, experimental or proprietary messages
 type MessageUnknown struct {
 	Payload []byte
 }
@@ -232,6 +244,8 @@ func (msg MessageUnknown) Number() (msgNumber int) {
 
 var FramePreamble byte = 0xD3
 
+// Frame wraps an RTCM3 message to provide a boundary for parsing binary
+// data
 type Frame struct {
 	Preamble uint8
 	Reserved uint8
@@ -253,11 +267,13 @@ func EncapsulateByteArray(data []byte) (frame Frame) {
 	return frame
 }
 
+// EncapsulateMessage wraps any Message in an RTCM3 Frame
 func EncapsulateMessage(msg Message) (frame Frame) {
 	return EncapsulateByteArray(msg.Serialize())
 }
 
 func (frame Frame) MessageNumber() uint16 {
+	// TODO: Check length of Frame payload
 	return binary.BigEndian.Uint16(frame.Payload[0:2]) >> 4
 }
 
@@ -273,8 +289,11 @@ func (frame Frame) Serialize() []byte {
 	return data
 }
 
+// DeserializeFrame attempts to read RTCM Frame's from a bufio.Reader and
+// only reads first byte from reader if Preamble or CRC are incorrect
+// TODO: Consider returning the discarded byte, or using Peek for the first
+// byte as well
 func DeserializeFrame(reader *bufio.Reader) (frame Frame, err error) {
-	// Only reads first byte from reader if Preamble or CRC are incorrect
 	// Unfortunatly can't construct anything that will read bits (like iobit) until we have a byte array
 	preamble, err := reader.ReadByte()
 	if err != nil {

@@ -5,22 +5,22 @@ import (
 	"io"
 )
 
+// Scanner is used for parsing RTCM3 Messages from a Reader
 type Scanner struct {
 	Reader *bufio.Reader
 }
 
-// NewScanner returns a Scanner for the given io.Reader
 func NewScanner(r io.Reader) Scanner {
 	return Scanner{bufio.NewReader(r)}
 }
 
-// Next reads from Scanner until a Message is found
-func (scanner Scanner) Next() (message Message, err error) {
+// NextMessage reads from Scanner until a Message is found
+func (scanner Scanner) NextMessage() (message Message, err error) {
 	frame, err := scanner.NextFrame()
 	if err != nil {
 		return nil, err
 	}
-	return DeserializeMessage(frame.Payload), err // probably have DeserializeMessage return err
+	return DeserializeMessage(frame.Payload), err // DeserializeMessage should return err
 }
 
 // NextFrame reads from Scanner until a valid Frame is found
