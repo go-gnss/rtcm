@@ -22,8 +22,8 @@ func main() {
 	}
 
 	scanner := rtcm3.NewScanner(resp.Body)
-	for msg, err := scanner.Next(); err == nil; msg, err = scanner.Next() {
-		if obs, ok := msg.(rtcm3.Observable); ok {
+	for msg, err := scanner.NextMessage(); err == nil; msg, err = scanner.NextMessage() {
+		if obs, ok := msg.(rtcm3.Observation); ok {
 			fmt.Println(msg.Number(), time.Now().UTC().Sub(obs.Time()))
 		} else {
 			fmt.Println(msg.Number())
