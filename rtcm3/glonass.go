@@ -40,6 +40,10 @@ func (msg Message1009) Time() time.Time {
 	return DF034(msg.Epoch, time.Now().UTC())
 }
 
+func (msg Message1009) SatelliteCount() int {
+	return len(msg.SignalData)
+}
+
 // Extended L1-Only GLONASS RTK Observables
 type Message1010 struct {
 	AbstractMessage
@@ -73,6 +77,10 @@ func (msg Message1010) Serialize() []byte {
 
 func (msg Message1010) Time() time.Time {
 	return DF034(msg.Epoch, time.Now().UTC())
+}
+
+func (msg Message1010) SatelliteCount() int {
+	return len(msg.SignalData)
 }
 
 // L1&L2 GLONASS RTK Observables
@@ -110,6 +118,10 @@ func (msg Message1011) Serialize() []byte {
 
 func (msg Message1011) Time() time.Time {
 	return DF034(msg.Epoch, time.Now().UTC())
+}
+
+func (msg Message1011) SatelliteCount() int {
+	return len(msg.SignalData)
 }
 
 // Extended L1&L2 GLONASS RTK Observables
@@ -150,6 +162,10 @@ func (msg Message1012) Serialize() []byte {
 
 func (msg Message1012) Time() time.Time {
 	return DF034(msg.Epoch, time.Now().UTC())
+}
+
+func (msg Message1012) SatelliteCount() int {
+	return len(msg.SignalData)
 }
 
 // GLONASS Ionospheric Correction Differences

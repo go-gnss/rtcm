@@ -28,6 +28,10 @@ func (header MsmHeader) Number() int {
 	return int(header.MessageNumber)
 }
 
+func (header MsmHeader) SatelliteCount() int {
+	return bits.OnesCount(uint(header.SatelliteMask))
+}
+
 func DeserializeMsmHeader(r *iobit.Reader) (header MsmHeader) {
 	header = MsmHeader{
 		MessageNumber:          r.Uint16(12),
