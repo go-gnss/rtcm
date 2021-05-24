@@ -38,6 +38,10 @@ func (msg Message1001) Time() time.Time {
 	return DF004(msg.Epoch)
 }
 
+func (msg Message1001) SatelliteCount() int {
+	return len(msg.SatelliteData)
+}
+
 // Extended L1-Only GPS RTK Observables
 type Message1002 struct {
 	AbstractMessage
@@ -70,6 +74,10 @@ func (msg Message1002) Serialize() []byte {
 
 func (msg Message1002) Time() time.Time {
 	return DF004(msg.Epoch)
+}
+
+func (msg Message1002) SatelliteCount() int {
+	return len(msg.SatelliteData)
 }
 
 // L1&L2 GPS RTK Observables
@@ -106,6 +114,10 @@ func (msg Message1003) Serialize() []byte {
 
 func (msg Message1003) Time() time.Time {
 	return DF004(msg.Epoch)
+}
+
+func (msg Message1003) SatelliteCount() int {
+	return len(msg.SatelliteData)
 }
 
 // Extended L1&L2 GPS RTK Observables
@@ -145,6 +157,10 @@ func (msg Message1004) Serialize() []byte {
 
 func (msg Message1004) Time() time.Time {
 	return DF004(msg.Epoch)
+}
+
+func (msg Message1004) SatelliteCount() int {
+	return len(msg.SatelliteData)
 }
 
 // Network Auxiliary Station Data Message

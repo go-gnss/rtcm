@@ -21,6 +21,7 @@ type Observation interface {
 	Message
 	// Epoch at which the data was observed
 	Time() time.Time
+	SatelliteCount() int
 }
 
 // AbstractMessage is used to factor out the MessageNumber attribute
