@@ -3,10 +3,11 @@ package rtcm3_test
 import (
 	"bufio"
 	"fmt"
-	"github.com/go-gnss/rtcm/rtcm3"
-	"github.com/google/go-cmp/cmp"
 	"os"
 	"testing"
+
+	"github.com/go-gnss/rtcm/rtcm3"
+	"github.com/google/go-cmp/cmp"
 )
 
 var (
@@ -26,6 +27,26 @@ func readPayload(msgNumber uint) (payload []byte) {
 	br := bufio.NewReader(r)
 	frame, _ := rtcm3.DeserializeFrame(br)
 	return frame.Payload
+}
+
+func TestCoords(t *testing.T) {
+	var x int64 = -44723575368
+	var y int64 = 26704851794
+	var z int64 = -36693744263
+
+	binary := readPayload(1006)
+	msg := rtcm3.DeserializeMessage(binary)
+	c := msg.(rtcm3.Message1006)
+
+	if c.ReferencePointX != x {
+		t.Errorf("parsed 1006 ECEF X coord incorrectly: expected %q received %q", x, c.ReferencePointX)
+	}
+	if c.ReferencePointY != y {
+		t.Errorf("parsed 1006 ECEF Y coord incorrectly: expected %q received %q", y, c.ReferencePointX)
+	}
+	if c.ReferencePointZ != z {
+		t.Errorf("parsed 1006 ECEF Z coord incorrectly: expected %q received %q", z, c.ReferencePointX)
+	}
 }
 
 func TestSerializeDeserialize(t *testing.T) {
