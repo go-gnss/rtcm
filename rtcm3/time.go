@@ -9,7 +9,12 @@ import (
 // GPS Epoch Time (TOW)
 func DF004(e uint32) time.Time {
 	now := time.Now().UTC()
-	sow := now.Truncate(time.Hour*24).AddDate(0, 0, -int(now.Weekday()))
+	return DF004Time(e, now)
+}
+
+func DF004Time(e uint32, start time.Time) time.Time {
+	start = start.Add(rtcm.GpsLeapSeconds()) // UTC to GPS time
+	sow := start.Truncate(time.Hour*24).AddDate(0, 0, -int(start.Weekday()))
 	tow := time.Duration(e) * time.Millisecond
 	return sow.Add(-(rtcm.GpsLeapSeconds())).Add(tow)
 }
