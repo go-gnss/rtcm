@@ -1,9 +1,11 @@
 package rtcm3_test
 
 import (
-	"github.com/go-gnss/rtcm/rtcm3"
 	"testing"
 	"time"
+
+	"github.com/go-gnss/rtcm"
+	"github.com/go-gnss/rtcm/rtcm3"
 )
 
 func TestDF034(t *testing.T) {
@@ -15,6 +17,24 @@ func TestDF034(t *testing.T) {
 	afterUtcZero := time.Date(2019, 2, 8, 00, 44, 44, 0, time.UTC)
 	if afterUtcZero != rtcm3.DF034(13484000, afterUtcZero) {
 		t.Errorf("DF034 time incorrect after UTC 0: %v", rtcm3.DF034(13484000, afterUtcZero))
+	}
+}
+
+func TestDF004(t *testing.T) {
+	utcInitialDate := time.Date(2021, 12, 12, 0, 0, 0, 0, time.UTC)
+	utcDate := utcInitialDate
+	end := 60 * 60 * 24 * 8 // week + 1 day
+	for i := 0; i <= end; i++ {
+		utcDate = utcInitialDate.Add(time.Duration(i) * time.Second)
+
+		gpsDate := utcDate.Add(rtcm.GpsLeapSeconds())
+		sow := gpsDate.Truncate(time.Hour*24).AddDate(0, 0, -int(gpsDate.Weekday()))
+		e := uint32(gpsDate.Sub(sow).Milliseconds())
+
+		latency := utcDate.Sub(rtcm3.DF004Time(e, utcDate)).Milliseconds()
+		if latency != 0 {
+			t.Errorf("DF004 time incorrect. Expected %v, got %v (%vms difference)", utcDate, rtcm3.DF004Time(e, utcDate), latency)
+		}
 	}
 }
 
