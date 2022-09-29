@@ -1,10 +1,11 @@
 package rtcm3
 
 import (
-	"github.com/bamiaux/iobit"
 	"math"
 	"math/bits"
 	"time"
+
+	"github.com/bamiaux/iobit"
 )
 
 // TODO: Can't parse using restruct until https://github.com/go-restruct/restruct/pull/32
@@ -749,7 +750,7 @@ func DeserializeMessage1081(data []byte) Message1081 {
 }
 
 func (msg Message1081) Time() time.Time {
-	return GlonassTimeMSM(msg.MsmHeader.Epoch)
+	return GlonassTimeMSMNow(msg.MsmHeader.Epoch)
 }
 
 // GLONASS MSM2
@@ -764,7 +765,7 @@ func DeserializeMessage1082(data []byte) Message1082 {
 }
 
 func (msg Message1082) Time() time.Time {
-	return GlonassTimeMSM(msg.MsmHeader.Epoch)
+	return GlonassTimeMSMNow(msg.MsmHeader.Epoch)
 }
 
 // GLONASS MSM3
@@ -779,7 +780,7 @@ func DeserializeMessage1083(data []byte) Message1083 {
 }
 
 func (msg Message1083) Time() time.Time {
-	return GlonassTimeMSM(msg.MsmHeader.Epoch)
+	return GlonassTimeMSMNow(msg.MsmHeader.Epoch)
 }
 
 // GLONASS MSM4
@@ -794,7 +795,7 @@ func DeserializeMessage1084(data []byte) Message1084 {
 }
 
 func (msg Message1084) Time() time.Time {
-	return GlonassTimeMSM(msg.MsmHeader.Epoch)
+	return GlonassTimeMSMNow(msg.MsmHeader.Epoch)
 }
 
 // GLONASS MSM5
@@ -809,7 +810,7 @@ func DeserializeMessage1085(data []byte) Message1085 {
 }
 
 func (msg Message1085) Time() time.Time {
-	return GlonassTimeMSM(msg.MsmHeader.Epoch)
+	return GlonassTimeMSMNow(msg.MsmHeader.Epoch)
 }
 
 // GLONASS MSM6
@@ -824,7 +825,7 @@ func DeserializeMessage1086(data []byte) Message1086 {
 }
 
 func (msg Message1086) Time() time.Time {
-	return GlonassTimeMSM(msg.MsmHeader.Epoch)
+	return GlonassTimeMSMNow(msg.MsmHeader.Epoch)
 }
 
 // GLONASS MSM7
@@ -839,7 +840,7 @@ func DeserializeMessage1087(data []byte) Message1087 {
 }
 
 func (msg Message1087) Time() time.Time {
-	return GlonassTimeMSM(msg.MsmHeader.Epoch)
+	return GlonassTimeMSMNow(msg.MsmHeader.Epoch)
 }
 
 // Galileo MSM1
