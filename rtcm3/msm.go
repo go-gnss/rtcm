@@ -1170,7 +1170,7 @@ func DeserializeMessage1121(data []byte) Message1121 {
 }
 
 func (msg Message1121) Time() time.Time {
-	return DF004(msg.MsmHeader.Epoch).Add(14 * time.Second)
+	return DF427(msg.MsmHeader.Epoch, time.Now())
 }
 
 // BeiDou MSM2
@@ -1185,7 +1185,7 @@ func DeserializeMessage1122(data []byte) Message1122 {
 }
 
 func (msg Message1122) Time() time.Time {
-	return DF004(msg.MsmHeader.Epoch).Add(14 * time.Second)
+	return DF427(msg.MsmHeader.Epoch, time.Now())
 }
 
 // BeiDou MSM3
@@ -1200,7 +1200,7 @@ func DeserializeMessage1123(data []byte) Message1123 {
 }
 
 func (msg Message1123) Time() time.Time {
-	return DF004(msg.MsmHeader.Epoch).Add(14 * time.Second)
+	return DF427(msg.MsmHeader.Epoch, time.Now())
 }
 
 // BeiDou MSM4
@@ -1215,7 +1215,7 @@ func DeserializeMessage1124(data []byte) Message1124 {
 }
 
 func (msg Message1124) Time() time.Time {
-	return DF004(msg.MsmHeader.Epoch).Add(14 * time.Second)
+	return DF427(msg.MsmHeader.Epoch, time.Now())
 }
 
 // BeiDou MSM5
@@ -1230,7 +1230,7 @@ func DeserializeMessage1125(data []byte) Message1125 {
 }
 
 func (msg Message1125) Time() time.Time {
-	return DF004(msg.MsmHeader.Epoch).Add(14 * time.Second)
+	return DF427(msg.MsmHeader.Epoch, time.Now())
 }
 
 // BeiDou MSM6
@@ -1245,7 +1245,7 @@ func DeserializeMessage1126(data []byte) Message1126 {
 }
 
 func (msg Message1126) Time() time.Time {
-	return DF004(msg.MsmHeader.Epoch).Add(14 * time.Second)
+	return DF427(msg.MsmHeader.Epoch, time.Now())
 }
 
 // BeiDou MSM7
@@ -1260,5 +1260,5 @@ func DeserializeMessage1127(data []byte) Message1127 {
 }
 
 func (msg Message1127) Time() time.Time {
-	return DF004(msg.MsmHeader.Epoch).Add(14 * time.Second)
+	return DF427(msg.MsmHeader.Epoch, time.Now())
 }
