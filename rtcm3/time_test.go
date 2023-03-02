@@ -20,6 +20,23 @@ func TestDF034(t *testing.T) {
 	}
 }
 
+func TestDF427(t *testing.T) {
+	refTimeG0 := time.Date(2023, 2, 25, 23, 59, 42, 0, time.UTC)
+	if time := rtcm3.DF427(604786000, refTimeG0); time != refTimeG0 {
+		t.Errorf("DF427 time incorrect at GPS 0: %v, expected %v", time, refTimeG0)
+	}
+
+	refTimeB0 := time.Date(2023, 2, 25, 23, 59, 56, 0, time.UTC)
+	if time := rtcm3.DF427(0, refTimeB0); time != refTimeB0 {
+		t.Errorf("DF427 time incorrect at BeiDou 0: %v, expected %v", time, refTimeB0)
+	}
+
+	refTimeX := time.Date(2019, 2, 8, 00, 44, 44, 0, time.UTC)
+	if time := rtcm3.DF034(13484000, refTimeX); time != refTimeX {
+		t.Errorf("DF427 time incorrect: %v, expected %v", time, refTimeX)
+	}
+}
+
 func TestGlonassTimeMSM(t *testing.T) {
 	midweek := time.Date(2019, 3, 28, 4, 2, 9, 0, time.UTC)
 	if time := rtcm3.GlonassTimeMSM(562199912, midweek); time != midweek {

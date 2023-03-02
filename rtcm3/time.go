@@ -13,6 +13,7 @@ func DF004(e uint32) time.Time {
 }
 
 func DF004Time(e uint32, start time.Time) time.Time {
+	// TODO: GpsLeapSeconds should take a time to return leap seconds as at that time
 	start = start.Add(rtcm.GpsLeapSeconds()) // UTC to GPS time
 	sow := start.Truncate(time.Hour*24).AddDate(0, 0, -int(start.Weekday()))
 	tow := time.Duration(e) * time.Millisecond
@@ -21,10 +22,10 @@ func DF004Time(e uint32, start time.Time) time.Time {
 
 // BeiDou Epoch Time (TOW)
 func DF427(e uint32, start time.Time) time.Time {
-	start = start.Add(rtcm.GpsLeapSeconds()) // UTC to GPS time
-	sow := start.Truncate(time.Hour*24).AddDate(0, 0, -int(start.Weekday())).Add(-14 * time.Second)
+	start = start.Add(rtcm.GpsLeapSeconds() - 14*time.Second) // UTC to GPS time
+	sow := start.Truncate(time.Hour*24).AddDate(0, 0, -int(start.Weekday()))
 	tow := time.Duration(e) * time.Millisecond
-	return sow.Add(-(rtcm.GpsLeapSeconds())).Add(tow)
+	return sow.Add(-(rtcm.GpsLeapSeconds())).Add(tow + 14*time.Second)
 }
 
 // GPS Epoch Time 1s
