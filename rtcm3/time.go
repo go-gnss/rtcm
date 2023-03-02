@@ -19,6 +19,14 @@ func DF004Time(e uint32, start time.Time) time.Time {
 	return sow.Add(-(rtcm.GpsLeapSeconds())).Add(tow)
 }
 
+// BeiDou Epoch Time (TOW)
+func DF427(e uint32, start time.Time) time.Time {
+	start = start.Add(rtcm.GpsLeapSeconds()) // UTC to GPS time
+	sow := start.Truncate(time.Hour*24).AddDate(0, 0, -int(start.Weekday())).Add(-14 * time.Second)
+	tow := time.Duration(e) * time.Millisecond
+	return sow.Add(-(rtcm.GpsLeapSeconds())).Add(tow)
+}
+
 // GPS Epoch Time 1s
 func DF385(e uint32) time.Time {
 	now := time.Now().UTC()
@@ -37,11 +45,17 @@ func DF034(e uint32, now time.Time) time.Time {
 	return dow.Add(tod)
 }
 
-func GlonassTimeMSM(e uint32) time.Time {
-	now := time.Now().UTC()
+func GlonassTimeMSMNow(e uint32) time.Time {
+	return GlonassTimeMSM(e, time.Now())
+}
+
+// DF416 + DF034
+func GlonassTimeMSM(e uint32, now time.Time) time.Time {
+	now = now.UTC().Add(3 * time.Hour)
 	sow := now.Truncate(time.Hour*24).AddDate(0, 0, -int(now.Weekday()))
 	dow := int((e >> 27) & 0x7)
 	tod := time.Duration(e&0x7FFFFFF) * time.Millisecond
+	// TODO: Do we truncate the 3 hours earlier? Write test
 	return sow.AddDate(0, 0, dow).Add(tod).Add(-(3 * time.Hour))
 }
 

@@ -10,13 +10,41 @@ import (
 
 func TestDF034(t *testing.T) {
 	beforeUtcZero := time.Date(2019, 2, 7, 23, 41, 40, 0, time.UTC)
-	if beforeUtcZero != rtcm3.DF034(9700000, beforeUtcZero) {
-		t.Errorf("DF034 time incorrect before UTC 0: %v", rtcm3.DF034(9700000, beforeUtcZero))
+	if time := rtcm3.DF034(9700000, beforeUtcZero); time != beforeUtcZero {
+		t.Errorf("DF034 time incorrect before UTC 0: %v", time)
 	}
 
 	afterUtcZero := time.Date(2019, 2, 8, 00, 44, 44, 0, time.UTC)
-	if afterUtcZero != rtcm3.DF034(13484000, afterUtcZero) {
-		t.Errorf("DF034 time incorrect after UTC 0: %v", rtcm3.DF034(13484000, afterUtcZero))
+	if time := rtcm3.DF034(13484000, afterUtcZero); time != afterUtcZero {
+		t.Errorf("DF034 time incorrect after UTC 0: %v", time)
+	}
+}
+
+func TestGlonassTimeMSM(t *testing.T) {
+	midweek := time.Date(2019, 3, 28, 4, 2, 9, 0, time.UTC)
+	if time := rtcm3.GlonassTimeMSM(562199912, midweek); time != midweek {
+		t.Errorf("GlonassMSM time incorrect midweek: %v, should be %v", time, midweek)
+	}
+
+	// the following three tests ensure that the 3 hour difference between Glonass time and UTC
+	// is checked before calculating the start of week - the bitwise OR adds the day of week to
+	// the start of the epoch (first 3 bits of epoch)
+	preSundayBug := time.Date(2019, 2, 2, 20, 59, 59, 999000000, time.UTC)
+	//                        2019, 2, 2, 23, 59, 59, 999000000, time.GLO
+	if time := rtcm3.GlonassTimeMSM(86399999|0x30000000, preSundayBug); time != preSundayBug {
+		t.Errorf("PreBug time incorrect: %v, should be %v", time, preSundayBug)
+	}
+
+	startSundayBug := time.Date(2019, 2, 2, 21, 0, 0, 0, time.UTC) // preSundayBug + 1 second
+	//                          2019, 2, 3,  0, 0, 0, 0, time.GLO
+	if time := rtcm3.GlonassTimeMSM(0, startSundayBug); time != startSundayBug {
+		t.Errorf("StartBug time incorrect: %v, should be %v", time, startSundayBug)
+	}
+
+	endSundayBug := time.Date(2019, 2, 2, 23, 59, 59, 0, time.UTC)
+	//                        2019, 2, 3, 02, 59, 59, 0, time.GLO
+	if time := rtcm3.GlonassTimeMSM(10799000, endSundayBug); time != endSundayBug {
+		t.Errorf("SundayBug time incorrect: %v, should be %v", time, endSundayBug)
 	}
 }
 
