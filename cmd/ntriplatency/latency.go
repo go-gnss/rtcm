@@ -32,7 +32,8 @@ func main() {
 	}
 
 	scanner := rtcm3.NewScanner(resp.Body)
-	for msg, err := scanner.NextMessage(); err == nil; msg, err = scanner.NextMessage() {
+	var msg rtcm3.Message
+	for msg, err = scanner.NextMessage(); err == nil; msg, err = scanner.NextMessage() {
 		if *outputJson {
 			out, _ := json.Marshal(msg)
 			fmt.Println(string(out))
@@ -46,4 +47,6 @@ func main() {
 			fmt.Println(msg.Number(), "N/A")
 		}
 	}
+
+	fmt.Printf("disconnected with error: %s", err)
 }

@@ -50,7 +50,7 @@ func MessageNumber(payload []byte) (uint16, error) {
 func DeserializeMessage(payload []byte) (Message, error) {
 	messageNumber, err := MessageNumber(payload)
 	if err != nil {
-		return nil, fmt.Errorf("invalid rtcm message: %e", err)
+		return nil, fmt.Errorf("invalid rtcm message: %s", err)
 	}
 
 	switch int(messageNumber) {

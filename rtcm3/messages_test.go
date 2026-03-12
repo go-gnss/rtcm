@@ -37,7 +37,7 @@ func TestCoords(t *testing.T) {
 	binary := readPayload(1006)
 	msg, err := rtcm3.DeserializeMessage(binary)
 	if err != nil {
-		t.Errorf("failed to deserialize 1006 message: %e", err)
+		t.Errorf("failed to deserialize 1006 message: %s", err)
 	}
 
 	c := msg.(rtcm3.Message1006)
