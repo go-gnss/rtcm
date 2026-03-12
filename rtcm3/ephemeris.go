@@ -2,6 +2,7 @@ package rtcm3
 
 import (
 	"encoding/binary"
+
 	"github.com/go-restruct/restruct"
 )
 
@@ -40,9 +41,8 @@ type Message1019 struct {
 	FitInterval  bool   `struct:"uint8:1,variantbool"`
 }
 
-func DeserializeMessage1019(data []byte) (msg Message1019) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1019(data []byte) (msg Message1019, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1019) Serialize() []byte {
@@ -93,9 +93,8 @@ type Message1020 struct {
 	Reserved                  uint8  `struct:"uint8:7"`
 }
 
-func DeserializeMessage1020(data []byte) (msg Message1020) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1020(data []byte) (msg Message1020, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1020) Serialize() []byte {
@@ -136,9 +135,8 @@ type Message1042 struct {
 	SVHealth    bool   `struct:"uint8:1,variantbool"`
 }
 
-func DeserializeMessage1042(data []byte) (msg Message1042) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1042(data []byte) (msg Message1042, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1042) Serialize() []byte {
@@ -180,9 +178,8 @@ type Message1044 struct {
 	FitInterval bool   `struct:"uint8:1,variantbool"`
 }
 
-func DeserializeMessage1044(data []byte) (msg Message1044) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1044(data []byte) (msg Message1044, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1044) Serialize() []byte {
@@ -223,9 +220,8 @@ type Message1045 struct {
 	Reserved    uint8  `struct:"uint8:7"`
 }
 
-func DeserializeMessage1045(data []byte) (msg Message1045) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1045(data []byte) (msg Message1045, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1045) Serialize() []byte {
@@ -269,9 +265,8 @@ type Message1046 struct {
 	Reserved              uint8  `struct:"uint8:2"`
 }
 
-func DeserializeMessage1046(data []byte) (msg Message1046) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1046(data []byte) (msg Message1046, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1046) Serialize() []byte {

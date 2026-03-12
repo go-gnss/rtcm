@@ -68,7 +68,6 @@ func SerializeMsmHeader(w *iobit.Writer, header MsmHeader) {
 	w.PutUint64(64, header.SatelliteMask)
 	w.PutUint32(32, header.SignalMask)
 	w.PutUint64(uint(bits.OnesCount(uint(header.SignalMask))*bits.OnesCount(uint(header.SatelliteMask))), header.CellMask)
-	return
 }
 
 type SatelliteDataMsm57 struct {
@@ -79,16 +78,16 @@ type SatelliteDataMsm57 struct {
 }
 
 func DeserializeSatelliteDataMsm57(r *iobit.Reader, nsat int) (satData SatelliteDataMsm57) {
-	for i := 0; i < nsat; i++ {
+	for range nsat {
 		satData.RangeMilliseconds = append(satData.RangeMilliseconds, r.Uint8(8))
 	}
-	for i := 0; i < nsat; i++ {
+	for range nsat {
 		satData.Extended = append(satData.Extended, r.Uint8(4))
 	}
-	for i := 0; i < nsat; i++ {
+	for range nsat {
 		satData.Ranges = append(satData.Ranges, r.Uint16(10))
 	}
-	for i := 0; i < nsat; i++ {
+	for range nsat {
 		satData.PhaseRangeRates = append(satData.PhaseRangeRates, r.Int16(14))
 	}
 	return satData
@@ -119,22 +118,22 @@ type SignalDataMsm7 struct {
 }
 
 func DeserializeSignalDataMsm7(r *iobit.Reader, ncell int) (sigData SignalDataMsm7) {
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.Pseudoranges = append(sigData.Pseudoranges, r.Int32(20))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRanges = append(sigData.PhaseRanges, r.Int32(24))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRangeLocks = append(sigData.PhaseRangeLocks, r.Uint16(10))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.HalfCycles = append(sigData.HalfCycles, r.Bit())
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.Cnrs = append(sigData.Cnrs, r.Uint16(10))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRangeRates = append(sigData.PhaseRangeRates, r.Int16(15))
 	}
 	return sigData
@@ -196,10 +195,10 @@ type SatelliteDataMsm46 struct {
 }
 
 func DeserializeSatelliteDataMsm46(r *iobit.Reader, nsat int) (satData SatelliteDataMsm46) {
-	for i := 0; i < nsat; i++ {
+	for range nsat {
 		satData.RangeMilliseconds = append(satData.RangeMilliseconds, r.Uint8(8))
 	}
-	for i := 0; i < nsat; i++ {
+	for range nsat {
 		satData.Ranges = append(satData.Ranges, r.Uint16(10))
 	}
 	return satData
@@ -223,19 +222,19 @@ type SignalDataMsm6 struct {
 }
 
 func DeserializeSignalDataMsm6(r *iobit.Reader, ncell int) (sigData SignalDataMsm6) {
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.Pseudoranges = append(sigData.Pseudoranges, r.Int32(20))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRanges = append(sigData.PhaseRanges, r.Int32(24))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRangeLocks = append(sigData.PhaseRangeLocks, r.Uint16(10))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.HalfCycles = append(sigData.HalfCycles, r.Bit())
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.Cnrs = append(sigData.Cnrs, r.Uint16(10))
 	}
 	return sigData
@@ -298,22 +297,22 @@ type SignalDataMsm5 struct {
 }
 
 func DeserializeSignalDataMsm5(r *iobit.Reader, ncell int) (sigData SignalDataMsm5) {
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.Pseudoranges = append(sigData.Pseudoranges, r.Int16(15))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRanges = append(sigData.PhaseRanges, r.Int32(22))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRangeLocks = append(sigData.PhaseRangeLocks, r.Uint8(4))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.HalfCycles = append(sigData.HalfCycles, r.Bit())
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.Cnrs = append(sigData.Cnrs, r.Uint8(6))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRangeRates = append(sigData.PhaseRangeRates, r.Int16(15))
 	}
 	return sigData
@@ -378,19 +377,19 @@ type SignalDataMsm4 struct {
 }
 
 func DeserializeSignalDataMsm4(r *iobit.Reader, ncell int) (sigData SignalDataMsm4) {
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.Pseudoranges = append(sigData.Pseudoranges, r.Int16(15))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRanges = append(sigData.PhaseRanges, r.Int32(22))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRangeLocks = append(sigData.PhaseRangeLocks, r.Uint8(4))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.HalfCycles = append(sigData.HalfCycles, r.Bit())
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.Cnrs = append(sigData.Cnrs, r.Uint8(6))
 	}
 	return sigData
@@ -448,7 +447,7 @@ type SatelliteDataMsm123 struct {
 }
 
 func DeserializeSatelliteDataMsm123(r *iobit.Reader, nsat int) (satData SatelliteDataMsm123) {
-	for i := 0; i < nsat; i++ {
+	for range nsat {
 		satData.Ranges = append(satData.Ranges, r.Uint16(10))
 	}
 	return satData
@@ -462,16 +461,16 @@ type SignalDataMsm3 struct {
 }
 
 func DeserializeSignalDataMsm3(r *iobit.Reader, ncell int) (sigData SignalDataMsm3) {
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.Pseudoranges = append(sigData.Pseudoranges, r.Int16(15))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRanges = append(sigData.PhaseRanges, r.Int32(22))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRangeLocks = append(sigData.PhaseRangeLocks, r.Uint8(4))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.HalfCycles = append(sigData.HalfCycles, r.Bit())
 	}
 	return sigData
@@ -530,13 +529,13 @@ type SignalDataMsm2 struct {
 }
 
 func DeserializeSignalDataMsm2(r *iobit.Reader, ncell int) (sigData SignalDataMsm2) {
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRanges = append(sigData.PhaseRanges, r.Int32(22))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.PhaseRangeLocks = append(sigData.PhaseRangeLocks, r.Uint8(4))
 	}
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.HalfCycles = append(sigData.HalfCycles, r.Bit())
 	}
 	return sigData
@@ -590,7 +589,7 @@ type SignalDataMsm1 struct {
 }
 
 func DeserializeSignalDataMsm1(r *iobit.Reader, ncell int) (sigData SignalDataMsm1) {
-	for i := 0; i < ncell; i++ {
+	for range ncell {
 		sigData.Pseudoranges = append(sigData.Pseudoranges, r.Int16(15))
 	}
 	return sigData

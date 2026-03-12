@@ -2,9 +2,12 @@ package rtcm3
 
 import (
 	"encoding/binary"
+	"fmt"
+	"math/bits"
+	"time"
+
 	"github.com/bamiaux/iobit"
 	"github.com/go-restruct/restruct"
-	"time"
 )
 
 // L1-Only GLONASS RTK Observables
@@ -26,9 +29,8 @@ type Message1009 struct {
 	}
 }
 
-func DeserializeMessage1009(data []byte) (msg Message1009) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1009(data []byte) (msg Message1009, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1009) Serialize() []byte {
@@ -65,9 +67,8 @@ type Message1010 struct {
 	}
 }
 
-func DeserializeMessage1010(data []byte) (msg Message1010) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1010(data []byte) (msg Message1010, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1010) Serialize() []byte {
@@ -106,9 +107,8 @@ type Message1011 struct {
 	}
 }
 
-func DeserializeMessage1011(data []byte) (msg Message1011) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1011(data []byte) (msg Message1011, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1011) Serialize() []byte {
@@ -150,9 +150,8 @@ type Message1012 struct {
 	}
 }
 
-func DeserializeMessage1012(data []byte) (msg Message1012) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1012(data []byte) (msg Message1012, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1012) Serialize() []byte {
@@ -186,9 +185,8 @@ type Message1037 struct {
 	}
 }
 
-func DeserializeMessage1037(data []byte) (msg Message1037) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1037(data []byte) (msg Message1037, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1037) Serialize() []byte {
@@ -215,9 +213,8 @@ type Message1038 struct {
 	}
 }
 
-func DeserializeMessage1038(data []byte) (msg Message1038) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1038(data []byte) (msg Message1038, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1038) Serialize() []byte {
@@ -245,9 +242,8 @@ type Message1039 struct {
 	}
 }
 
-func DeserializeMessage1039(data []byte) (msg Message1039) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1039(data []byte) (msg Message1039, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1039) Serialize() []byte {
@@ -268,7 +264,11 @@ type Message1230 struct {
 	L2PCodePhaseBias   int16
 }
 
-func DeserializeMessage1230(data []byte) (msg Message1230) {
+func DeserializeMessage1230(data []byte) (msg Message1230, err error) {
+	if len(data) < 4 { // header is 32 bits
+		return msg, fmt.Errorf("invalid rtcm 1230 message")
+	}
+
 	r := iobit.NewReader(data)
 	msg = Message1230{
 		AbstractMessage: AbstractMessage{
@@ -279,6 +279,11 @@ func DeserializeMessage1230(data []byte) (msg Message1230) {
 		Reserved:           r.Uint8(3),
 		SignalsMask:        r.Uint8(4),
 	}
+
+	if len(data) != 4+(bits.OnesCount(uint(msg.SignalsMask))*2) {
+		return msg, fmt.Errorf("invalid rtcm 1230 message")
+	}
+
 	if (msg.SignalsMask & 8) == 8 {
 		msg.L1CACodePhaseBias = r.Int16(16)
 	}
@@ -291,7 +296,7 @@ func DeserializeMessage1230(data []byte) (msg Message1230) {
 	if (msg.SignalsMask & 1) == 1 {
 		msg.L2PCodePhaseBias = r.Int16(16)
 	}
-	return msg
+	return msg, nil
 }
 
 func (msg Message1230) Serialize() []byte {

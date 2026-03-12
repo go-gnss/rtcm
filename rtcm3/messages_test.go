@@ -35,9 +35,12 @@ func TestCoords(t *testing.T) {
 	var z int64 = -36693744263
 
 	binary := readPayload(1006)
-	msg := rtcm3.DeserializeMessage(binary)
-	c := msg.(rtcm3.Message1006)
+	msg, err := rtcm3.DeserializeMessage(binary)
+	if err != nil {
+		t.Errorf("failed to deserialize 1006 message: %e", err)
+	}
 
+	c := msg.(rtcm3.Message1006)
 	if c.ReferencePointX != x {
 		t.Errorf("parsed 1006 ECEF X coord incorrectly: expected %q received %q", x, c.ReferencePointX)
 	}
@@ -52,11 +55,15 @@ func TestCoords(t *testing.T) {
 func TestSerializeDeserialize(t *testing.T) {
 	for _, number := range messages {
 		binary := readPayload(uint(number))
-		if !cmp.Equal(rtcm3.DeserializeMessage(binary).Serialize(), binary) {
-			t.Errorf("%v Deserialization not equal to binary", number)
+		msg, err := rtcm3.DeserializeMessage(binary)
+		if err != nil {
+			t.Errorf("failed to deserialize message number %d", number)
 		}
-		if _, unknown := rtcm3.DeserializeMessage(binary).(rtcm3.MessageUnknown); unknown {
-			t.Errorf("%v No Deserializer for Message", number)
+		if !cmp.Equal(msg.Serialize(), binary) {
+			t.Errorf("%v deserialization not equal to binary", number)
+		}
+		if _, unknown := msg.(rtcm3.MessageUnknown); unknown {
+			t.Errorf("%v no deserializer for message", number)
 		}
 	}
 }

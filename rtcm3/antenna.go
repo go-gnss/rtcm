@@ -2,6 +2,7 @@ package rtcm3
 
 import (
 	"encoding/binary"
+
 	"github.com/go-restruct/restruct"
 )
 
@@ -26,9 +27,8 @@ type Message1005 struct {
 	AntennaReferencePoint
 }
 
-func DeserializeMessage1005(data []byte) (msg Message1005) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1005(data []byte) (msg Message1005, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1005) Serialize() []byte {
@@ -43,9 +43,8 @@ type Message1006 struct {
 	AntennaHeight uint16 `struct:"uint16"`
 }
 
-func DeserializeMessage1006(data []byte) (msg Message1006) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1006(data []byte) (msg Message1006, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1006) Serialize() []byte {
@@ -66,9 +65,8 @@ type Message1007 struct {
 	MessageAntennaDescriptor
 }
 
-func DeserializeMessage1007(data []byte) (msg Message1007) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1007(data []byte) (msg Message1007, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1007) Serialize() []byte {
@@ -84,9 +82,8 @@ type Message1008 struct {
 	SerialNumber       string `struct:"[]byte,sizefrom=SerialNumberLength"`
 }
 
-func DeserializeMessage1008(data []byte) (msg Message1008) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1008(data []byte) (msg Message1008, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1008) Serialize() []byte {
@@ -108,9 +105,8 @@ type Message1033 struct {
 	ReceiverSerialNumber          string `struct:"[]byte,sizefrom=ReceiverSerialNumberLength"`
 }
 
-func DeserializeMessage1033(data []byte) (msg Message1033) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1033(data []byte) (msg Message1033, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1033) Serialize() []byte {

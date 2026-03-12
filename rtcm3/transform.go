@@ -2,6 +2,7 @@ package rtcm3
 
 import (
 	"encoding/binary"
+
 	"github.com/go-restruct/restruct"
 )
 
@@ -35,9 +36,8 @@ type Message1021 struct {
 	VerticalHMQualityIndicator             uint8  `struct:"uint8:3"`
 }
 
-func DeserializeMessage1021(data []byte) (msg Message1021) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1021(data []byte) (msg Message1021, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1021) Serialize() []byte {
@@ -78,9 +78,8 @@ type Message1022 struct {
 	VerticalHMQualityIndicator             uint8  `struct:"uint8:3"`
 }
 
-func DeserializeMessage1022(data []byte) (msg Message1022) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1022(data []byte) (msg Message1022, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1022) Serialize() []byte {
@@ -110,9 +109,8 @@ type Message1023 struct {
 	ModifiedJulianDayNumber                uint16 `struct:"uint16"`
 }
 
-func DeserializeMessage1023(data []byte) (msg Message1023) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1023(data []byte) (msg Message1023, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1023) Serialize() []byte {
@@ -140,9 +138,8 @@ type Message1024 struct {
 	ModifiedJulianDayNumber                uint16 `struct:"uint16"`
 }
 
-func DeserializeMessage1024(data []byte) (msg Message1024) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1024(data []byte) (msg Message1024, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1024) Serialize() []byte {
@@ -160,9 +157,8 @@ type Message1025 struct {
 	FN                         int64 `struct:"int64:35"`
 }
 
-func DeserializeMessage1025(data []byte) (msg Message1025) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1025(data []byte) (msg Message1025, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1025) Serialize() []byte {
@@ -182,9 +178,8 @@ type Message1026 struct {
 	NFO                        int64 `struct:"int64:35"`
 }
 
-func DeserializeMessage1026(data []byte) (msg Message1026) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1026(data []byte) (msg Message1026, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1026) Serialize() []byte {
@@ -206,9 +201,8 @@ type Message1027 struct {
 	NPC                        int64  `struct:"int64:35"`
 }
 
-func DeserializeMessage1027(data []byte) (msg Message1027) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1027(data []byte) (msg Message1027, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1027) Serialize() []byte {

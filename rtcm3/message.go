@@ -4,8 +4,10 @@ import (
 	"bufio"
 	"encoding/binary"
 	"errors"
-	"github.com/bamiaux/iobit"
+	"fmt"
 	"time"
+
+	"github.com/bamiaux/iobit"
 )
 
 // Message interface represents any RTCM3 message
@@ -34,12 +36,23 @@ func (msg AbstractMessage) Number() int {
 	return int(msg.MessageNumber)
 }
 
+// MessageNumber extracts message number from first 12 bits of payload
+func MessageNumber(payload []byte) (uint16, error) {
+	if len(payload) < 2 {
+		return 0, fmt.Errorf("no message number")
+	}
+	return binary.BigEndian.Uint16(payload[0:2]) >> 4, nil
+}
+
 // DeserializeMessage extracts Message Number from payload and
 // deserializes to the appropriate Message type
-// TODO: Check length of payload before attempting to parse
-// TODO: Each Deserialize method should return errors
-func DeserializeMessage(payload []byte) (msg Message) {
-	messageNumber := binary.BigEndian.Uint16(payload[0:2]) >> 4
+// TODO: Each Deserialize method should return errors, e.g. if payload []byte is too small
+func DeserializeMessage(payload []byte) (Message, error) {
+	messageNumber, err := MessageNumber(payload)
+	if err != nil {
+		return nil, fmt.Errorf("invalid rtcm message: %e", err)
+	}
+
 	switch int(messageNumber) {
 	case 1001:
 		return DeserializeMessage1001(payload)
@@ -137,94 +150,95 @@ func DeserializeMessage(payload []byte) (msg Message) {
 		return DeserializeMessage1065(payload)
 	case 1066:
 		return DeserializeMessage1066(payload)
+	// TODO: manually check message lengths in MSM deserializers because iobit Reader doesn't return errors
 	case 1071:
-		return DeserializeMessage1071(payload)
+		return DeserializeMessage1071(payload), nil
 	case 1072:
-		return DeserializeMessage1072(payload)
+		return DeserializeMessage1072(payload), nil
 	case 1073:
-		return DeserializeMessage1073(payload)
+		return DeserializeMessage1073(payload), nil
 	case 1074:
-		return DeserializeMessage1074(payload)
+		return DeserializeMessage1074(payload), nil
 	case 1075:
-		return DeserializeMessage1075(payload)
+		return DeserializeMessage1075(payload), nil
 	case 1076:
-		return DeserializeMessage1076(payload)
+		return DeserializeMessage1076(payload), nil
 	case 1077:
-		return DeserializeMessage1077(payload)
+		return DeserializeMessage1077(payload), nil
 	case 1081:
-		return DeserializeMessage1081(payload)
+		return DeserializeMessage1081(payload), nil
 	case 1082:
-		return DeserializeMessage1082(payload)
+		return DeserializeMessage1082(payload), nil
 	case 1083:
-		return DeserializeMessage1083(payload)
+		return DeserializeMessage1083(payload), nil
 	case 1084:
-		return DeserializeMessage1084(payload)
+		return DeserializeMessage1084(payload), nil
 	case 1085:
-		return DeserializeMessage1085(payload)
+		return DeserializeMessage1085(payload), nil
 	case 1086:
-		return DeserializeMessage1086(payload)
+		return DeserializeMessage1086(payload), nil
 	case 1087:
-		return DeserializeMessage1087(payload)
+		return DeserializeMessage1087(payload), nil
 	case 1091:
-		return DeserializeMessage1091(payload)
+		return DeserializeMessage1091(payload), nil
 	case 1092:
-		return DeserializeMessage1092(payload)
+		return DeserializeMessage1092(payload), nil
 	case 1093:
-		return DeserializeMessage1093(payload)
+		return DeserializeMessage1093(payload), nil
 	case 1094:
-		return DeserializeMessage1094(payload)
+		return DeserializeMessage1094(payload), nil
 	case 1095:
-		return DeserializeMessage1095(payload)
+		return DeserializeMessage1095(payload), nil
 	case 1096:
-		return DeserializeMessage1096(payload)
+		return DeserializeMessage1096(payload), nil
 	case 1097:
-		return DeserializeMessage1097(payload)
+		return DeserializeMessage1097(payload), nil
 	case 1101:
-		return DeserializeMessage1101(payload)
+		return DeserializeMessage1101(payload), nil
 	case 1102:
-		return DeserializeMessage1102(payload)
+		return DeserializeMessage1102(payload), nil
 	case 1103:
-		return DeserializeMessage1103(payload)
+		return DeserializeMessage1103(payload), nil
 	case 1104:
-		return DeserializeMessage1104(payload)
+		return DeserializeMessage1104(payload), nil
 	case 1105:
-		return DeserializeMessage1105(payload)
+		return DeserializeMessage1105(payload), nil
 	case 1106:
-		return DeserializeMessage1106(payload)
+		return DeserializeMessage1106(payload), nil
 	case 1107:
-		return DeserializeMessage1107(payload)
+		return DeserializeMessage1107(payload), nil
 	case 1111:
-		return DeserializeMessage1111(payload)
+		return DeserializeMessage1111(payload), nil
 	case 1112:
-		return DeserializeMessage1112(payload)
+		return DeserializeMessage1112(payload), nil
 	case 1113:
-		return DeserializeMessage1113(payload)
+		return DeserializeMessage1113(payload), nil
 	case 1114:
-		return DeserializeMessage1114(payload)
+		return DeserializeMessage1114(payload), nil
 	case 1115:
-		return DeserializeMessage1115(payload)
+		return DeserializeMessage1115(payload), nil
 	case 1116:
-		return DeserializeMessage1116(payload)
+		return DeserializeMessage1116(payload), nil
 	case 1117:
-		return DeserializeMessage1117(payload)
+		return DeserializeMessage1117(payload), nil
 	case 1121:
-		return DeserializeMessage1121(payload)
+		return DeserializeMessage1121(payload), nil
 	case 1122:
-		return DeserializeMessage1122(payload)
+		return DeserializeMessage1122(payload), nil
 	case 1123:
-		return DeserializeMessage1123(payload)
+		return DeserializeMessage1123(payload), nil
 	case 1124:
-		return DeserializeMessage1124(payload)
+		return DeserializeMessage1124(payload), nil
 	case 1125:
-		return DeserializeMessage1125(payload)
+		return DeserializeMessage1125(payload), nil
 	case 1126:
-		return DeserializeMessage1126(payload)
+		return DeserializeMessage1126(payload), nil
 	case 1127:
-		return DeserializeMessage1127(payload)
+		return DeserializeMessage1127(payload), nil
 	case 1230:
 		return DeserializeMessage1230(payload)
 	default:
-		return MessageUnknown{payload}
+		return MessageUnknown{payload}, nil
 	}
 }
 
@@ -273,11 +287,6 @@ func EncapsulateByteArray(data []byte) (frame Frame) {
 // EncapsulateMessage wraps any Message in an RTCM3 Frame
 func EncapsulateMessage(msg Message) (frame Frame) {
 	return EncapsulateByteArray(msg.Serialize())
-}
-
-func (frame Frame) MessageNumber() uint16 {
-	// TODO: Check length of Frame payload
-	return binary.BigEndian.Uint16(frame.Payload[0:2]) >> 4
 }
 
 func (frame Frame) Serialize() []byte {

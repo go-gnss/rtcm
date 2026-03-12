@@ -20,7 +20,7 @@ func (scanner Scanner) NextMessage() (message Message, err error) {
 	if err != nil {
 		return nil, err
 	}
-	return DeserializeMessage(frame.Payload), err // DeserializeMessage should return err
+	return DeserializeMessage(frame.Payload)
 }
 
 // NextFrame reads from Scanner until a valid Frame is found

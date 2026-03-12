@@ -2,6 +2,7 @@ package rtcm3
 
 import (
 	"encoding/binary"
+
 	"github.com/go-restruct/restruct"
 )
 
@@ -21,9 +22,8 @@ type Message1034 struct {
 	}
 }
 
-func DeserializeMessage1034(data []byte) (msg Message1034) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1034(data []byte) (msg Message1034, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1034) Serialize() []byte {
@@ -47,9 +47,8 @@ type Message1035 struct {
 	}
 }
 
-func DeserializeMessage1035(data []byte) (msg Message1035) {
-	restruct.Unpack(data, binary.BigEndian, &msg)
-	return msg
+func DeserializeMessage1035(data []byte) (msg Message1035, err error) {
+	return msg, restruct.Unpack(data, binary.BigEndian, &msg)
 }
 
 func (msg Message1035) Serialize() []byte {
