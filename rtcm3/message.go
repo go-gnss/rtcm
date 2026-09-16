@@ -345,3 +345,30 @@ func DeserializeFrame(reader *bufio.Reader) (frame Frame, err error) {
 	reader.Discard(len(data) - 1)
 	return frame, nil
 }
+
+func DeserializeFrameBytes(data []byte) (frame Frame, err error) {
+	if len(data) < 6 {
+		return frame, errors.New("data is smaller than minimum possible length")
+	}
+
+	if data[0] != FramePreamble {
+		return frame, errors.New("invalid preamble")
+	}
+
+	frame.Preamble = data[0]
+	frame.Reserved = uint8(data[1]) & 0xFC
+	frame.Length = binary.BigEndian.Uint16(data[1:3]) & 0x3FF
+
+	if len(data) < int(frame.Length+6) {
+		return frame, errors.New("data is smaller than frame length")
+	}
+
+	frame.Payload = data[3 : frame.Length+3]
+	frame.Crc = binary.BigEndian.Uint32(data[frame.Length+2:frame.Length+6]) & 0xFFFFFF
+
+	if Crc24q(data[:3+frame.Length]) != frame.Crc {
+		return frame, errors.New("invalid CRC")
+	}
+
+	return frame, nil
+}

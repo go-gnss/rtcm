@@ -68,14 +68,8 @@ func TestSerializeDeserialize(t *testing.T) {
 	}
 }
 
-func TestFrame(t *testing.T) {
-	r, _ := os.Open("data/1117_frame.bin")
-	br := bufio.NewReader(r)
-
-	binary, _ := br.Peek(227)
-	deserializedBinary, _ := rtcm3.DeserializeFrame(br)
-
-	frame := rtcm3.Frame{
+var (
+	frame = rtcm3.Frame{
 		Preamble: 211,
 		Reserved: 0,
 		Length:   121,
@@ -94,12 +88,37 @@ func TestFrame(t *testing.T) {
 		},
 		Crc: 0xfaf141,
 	}
+)
+
+func TestFrame(t *testing.T) {
+	r, _ := os.Open("data/1117_frame.bin")
+	br := bufio.NewReader(r)
+
+	binary, _ := br.Peek(227)
+	deserializedBinary, _ := rtcm3.DeserializeFrame(br)
 
 	if !cmp.Equal(frame.Serialize(), binary) {
 		t.Errorf("Frame serialization and binary not equal")
 	}
 
 	if !cmp.Equal(frame, deserializedBinary) {
+		t.Errorf("Frame and deserialized not equal")
+	}
+}
+
+func TestFrameBytes(t *testing.T) {
+	data, _ := os.ReadFile("data/1117_frame.bin")
+
+	deserialized, err := rtcm3.DeserializeFrameBytes(data)
+	if err != nil {
+		t.Fatal("error deserializing frame slice", err)
+	}
+
+	if !cmp.Equal(frame.Serialize(), data) {
+		t.Errorf("Frame serialization and binary not equal")
+	}
+
+	if !cmp.Equal(frame, deserialized) {
 		t.Errorf("Frame and deserialized not equal")
 	}
 }
